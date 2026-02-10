@@ -70,15 +70,6 @@ resource "rivestack_cluster_extension" "postgis" {
   extension  = "postgis"
 }
 
-# Restrict firewall to specific IPs.
-resource "rivestack_cluster_firewall" "production" {
-  cluster_id = rivestack_cluster.production.id
-  source_ips = [
-    "203.0.113.0/24",   # Office network
-    "198.51.100.10/32", # CI/CD server
-  ]
-}
-
 # Configure automated backups.
 resource "rivestack_cluster_backup_config" "production" {
   cluster_id     = rivestack_cluster.production.id

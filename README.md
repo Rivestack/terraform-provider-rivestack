@@ -89,7 +89,6 @@ output "connection_string" {
 | `rivestack_cluster_user` | Database user |
 | `rivestack_cluster_extension` | PostgreSQL extension |
 | `rivestack_cluster_grant` | User access grant |
-| `rivestack_cluster_firewall` | IP allowlist |
 | `rivestack_cluster_backup_config` | Backup schedule |
 
 ## Data Sources
@@ -117,7 +116,6 @@ terraform import rivestack_cluster_database.app 42/myapp
 terraform import rivestack_cluster_user.app 42/app_user
 terraform import rivestack_cluster_extension.vector 42/vector/myapp
 terraform import rivestack_cluster_grant.reader 42/reader/myapp
-terraform import rivestack_cluster_firewall.main 42
 terraform import rivestack_cluster_backup_config.main 42
 ```
 

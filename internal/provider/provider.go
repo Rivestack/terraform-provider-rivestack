@@ -18,7 +18,7 @@ import (
 	"github.com/rivestack/terraform-provider-rivestack/internal/resources/cluster_backup_config"
 	"github.com/rivestack/terraform-provider-rivestack/internal/resources/cluster_database"
 	"github.com/rivestack/terraform-provider-rivestack/internal/resources/cluster_extension"
-	"github.com/rivestack/terraform-provider-rivestack/internal/resources/cluster_firewall"
+
 	"github.com/rivestack/terraform-provider-rivestack/internal/resources/cluster_grant"
 	"github.com/rivestack/terraform-provider-rivestack/internal/resources/cluster_user"
 	"github.com/rivestack/terraform-provider-rivestack/internal/resources/extensions"
@@ -112,7 +112,6 @@ func (p *RivestackProvider) Resources(_ context.Context) []func() resource.Resou
 		cluster_database.NewResource,
 		cluster_extension.NewResource,
 		cluster_grant.NewResource,
-		cluster_firewall.NewResource,
 		cluster_backup_config.NewResource,
 	}
 }
