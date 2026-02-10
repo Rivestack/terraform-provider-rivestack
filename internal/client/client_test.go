@@ -40,7 +40,7 @@ func TestDoRequest_SetsHeaders(t *testing.T) {
 			t.Errorf("expected User-Agent header %q, got %q", "terraform-provider-rivestack/1.0.0", got)
 		}
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+		_ = json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 	}))
 	defer server.Close()
 
@@ -58,7 +58,7 @@ func TestDoRequest_SetsHeaders(t *testing.T) {
 func TestDoRequest_404ReturnsAPIError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
 			"error":   true,
 			"code":    404,
 			"message": "cluster not found",
@@ -79,7 +79,7 @@ func TestDoRequest_404ReturnsAPIError(t *testing.T) {
 func TestDoRequest_409ReturnsConflict(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusConflict)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
 			"error":   true,
 			"code":    409,
 			"message": "cluster has an active job",
@@ -110,7 +110,7 @@ func TestDoRequest_SendsJSONBody(t *testing.T) {
 			t.Errorf("expected name %q, got %q", "test-cluster", body["name"])
 		}
 		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(map[string]int{"id": 1})
+		_ = json.NewEncoder(w).Encode(map[string]int{"id": 1})
 	}))
 	defer server.Close()
 
@@ -140,7 +140,7 @@ func TestGetCluster(t *testing.T) {
 		if r.URL.Path != "/api/ha/42" {
 			t.Errorf("expected path /api/ha/42, got %s", r.URL.Path)
 		}
-		json.NewEncoder(w).Encode(Cluster{
+		_ = json.NewEncoder(w).Encode(Cluster{
 			ID:       42,
 			TenantID: "rs-abc123",
 			Name:     "test-cluster",
@@ -176,13 +176,13 @@ func TestProvisionCluster(t *testing.T) {
 		}
 
 		var req ProvisionClusterRequest
-		json.NewDecoder(r.Body).Decode(&req)
+		_ = json.NewDecoder(r.Body).Decode(&req)
 		if req.Name != "my-cluster" {
 			t.Errorf("expected name %q, got %q", "my-cluster", req.Name)
 		}
 
 		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(ProvisionClusterResponse{
+		_ = json.NewEncoder(w).Encode(ProvisionClusterResponse{
 			ID:       1,
 			TenantID: "rs-abc123",
 			Name:     "my-cluster",
@@ -216,7 +216,7 @@ func TestDeleteCluster(t *testing.T) {
 			t.Errorf("expected path /api/ha/42, got %s", r.URL.Path)
 		}
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]string{"message": "cluster deletion initiated"})
+		_ = json.NewEncoder(w).Encode(map[string]string{"message": "cluster deletion initiated"})
 	}))
 	defer server.Close()
 
@@ -234,13 +234,13 @@ func TestConfigureCluster(t *testing.T) {
 		}
 
 		var req ConfigureRequest
-		json.NewDecoder(r.Body).Decode(&req)
+		_ = json.NewDecoder(r.Body).Decode(&req)
 		if len(req.Users) != 1 || req.Users[0].Username != "testuser" {
 			t.Errorf("expected user testuser, got %+v", req.Users)
 		}
 
 		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(ConfigureResponse{
+		_ = json.NewEncoder(w).Encode(ConfigureResponse{
 			Message: "configuration initiated",
 			JobID:   100,
 			Users: []ConfigUserResponse{
@@ -270,7 +270,7 @@ func TestGetBackupConfig(t *testing.T) {
 		if r.URL.Path != "/api/ha/1/backup-config" {
 			t.Errorf("expected path /api/ha/1/backup-config, got %s", r.URL.Path)
 		}
-		json.NewEncoder(w).Encode(BackupConfig{
+		_ = json.NewEncoder(w).Encode(BackupConfig{
 			ID:            1,
 			ClusterID:     1,
 			Enabled:       true,
@@ -298,7 +298,7 @@ func TestGetServerTypes(t *testing.T) {
 		if r.URL.Path != "/api/ha/server-types" {
 			t.Errorf("expected path /api/ha/server-types, got %s", r.URL.Path)
 		}
-		json.NewEncoder(w).Encode(ServerTypesResponse{
+		_ = json.NewEncoder(w).Encode(ServerTypesResponse{
 			ServerTypes: []ServerType{
 				{Type: "starter", Name: "Starter", CPUs: 4, MemoryGB: 8},
 			},
@@ -325,7 +325,7 @@ func TestGetExtensions(t *testing.T) {
 		if r.URL.Path != "/api/ha/extensions" {
 			t.Errorf("expected path /api/ha/extensions, got %s", r.URL.Path)
 		}
-		json.NewEncoder(w).Encode(ExtensionsResponse{
+		_ = json.NewEncoder(w).Encode(ExtensionsResponse{
 			Extensions: []Extension{
 				{Name: "vector", Description: "Vector similarity search", Category: "ai", Default: true},
 				{Name: "postgis", Description: "Geographic objects", Category: "geo", Default: false},
