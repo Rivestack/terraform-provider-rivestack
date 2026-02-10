@@ -9,6 +9,26 @@ description: |-
 
 The Rivestack provider allows you to manage [Rivestack](https://rivestack.io) HA PostgreSQL clusters and their configuration using Terraform.
 
+## Architecture
+
+Each Rivestack HA cluster runs a primary node with streaming replication to one or more read replicas. A load balancer provides a single connection endpoint on port 5432 and routes traffic across the cluster nodes.
+
+```
+                    ┌───────────────┐
+   Clients ────────►│ Load Balancer │
+                    │  (VIP: 5432)  │
+                    └──────┬────────┘
+                           │
+              ┌────────────┼────────────┐
+              ▼            ▼            ▼
+         ┌─────────┐ ┌─────────┐ ┌─────────┐
+         │ Primary  │ │ Replica │ │ Replica │
+         │ (node 1) │ │ (node 2)│ │ (node 3)│
+         └─────────┘ └─────────┘ └─────────┘
+              │            ▲            ▲
+              └──── streaming replication──┘
+```
+
 ## Authentication
 
 The provider authenticates using a Rivestack API key. You can generate an API key from the Rivestack dashboard.
